@@ -18,7 +18,7 @@ my.ui <- fluidPage(
   
   p("Hello, and welcome to our application!  In this application you will find data analyses, data tables, and interactive plots, created 
     for the purpose of better understanding the International Coffee Organization's data on the coffee industry.  I will get more into 
-    the nitty gritty aspects of the data set under the", strong("Summary"), "tab.  You can also find a summary data table under the", 
+    the nitty gritty aspects of the data set under the", strong("Summary"), "tab.  You can also find a sample data table under the", 
     strong("Table"), "tab, and three different interactive plots under the other three tabs.  All of the widgets you see on the left-hand
     side of the application allow you to manipulate the data you see in the plots, so don't be afraid to play around with our visualizations.  
     We are very excited about presenting this data in a way that allows users to ask and answer their own questions, so please, explore 
@@ -59,7 +59,7 @@ my.ui <- fluidPage(
                    rows of the data, random comments left by the ICO, and many other silly formatting issues.  To solve this problem, we each took one data set and
                    went to town cleaning it.  We made useful column names, deleted all unnecessary spaces and the comments, and imported the files as CSV files.  With the
                    files cleaned, it was time to begin our analysis."),
-                 p("Like I mentioned earlier, our analysis will be presented in four different tabs.  The 'Table' tab contains a summaritive data table of parts of each data set,
+                 p("Like I mentioned earlier, our analysis will be presented in four different tabs.  The 'Table' tab contains a sample data table of parts of each data set,
                    the 'Total Production v Retail Price tab contains an interactive plot of total production compared to retail price, the 'Prices Paid to Growers v Retail Price tab
                    also contains an interactive plot, but this one of the prices paid to growers compared to retail price, and the 'Retail Price v Consumption' tab contains yet anther
                    interactive plot, this one of retail prices compared to consumption rates.  Users can interact with each of these plots by", strong("brushing"), "sections of the graphs
@@ -69,7 +69,8 @@ my.ui <- fluidPage(
                    is for you, the user. Thank you!"),
                  p("- Kyle, Mitesh, Sojin, and Taehyun")),
         # Table panel
-        tabPanel("Table", tableOutput("table")),
+        tabPanel("Table", h3("Sample of Retail Prices (in US $/lb)"), tableOutput("table"),
+                 h3("Sample of Grower Prices (in US cents/lb)"), tableOutput("table2")),
         # 1 of 3 plot panels
         tabPanel("Total Production v Retail Price", plotOutput("tp.v.rp")),
         # 2 of 3 plot panels
