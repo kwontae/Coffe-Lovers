@@ -23,4 +23,6 @@ my.server <- function(input, output) {
     select(Country, X1990, X1992, X1994, X1996, X1998, X2000, X2002, X2004, X2006, X2008, X2010, X2012, X2014, X2015)
   colnames(temp.grower) <- c("Country", "1990", "1992", "1994", "1996", "1998", "2000", "2002", "2004", "2006", "2008", "2010", "2012", "2014", "2015")
   output$table2 <- renderTable(temp.grower)
+  
+  # Price paid to the growers vs. Retail Price Plot
 }
