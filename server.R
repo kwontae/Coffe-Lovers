@@ -25,4 +25,7 @@ my.server <- function(input, output) {
   output$table2 <- renderTable(temp.grower)
   
   # Price paid to the growers vs. Retail Price Plot
+  #gr.retail <- filter(retail.prices, input$country) %>%
+   # select()
+  
 }

@@ -13,6 +13,8 @@ consumption <- read.csv("./data/clean4b-Consumption.csv", stringsAsFactors = FAL
 
 years <- c(1990:2015)
 
+grower.country <- grower.prices[-45,]
+
 my.ui <- fluidPage(
   titlePanel("Coffee Industry Report"),
   
@@ -30,7 +32,7 @@ my.ui <- fluidPage(
       # Drop-Down menu of countries
       selectInput("country", label = "Select Country", choices = c("USA", "usa")),
       # Drop-Down menu of Grower Countries
-      selectInput("cg.country", label = "Select a Coffe-Growing Country", choices = c("USA", "usa")),
+      selectInput("cg.country", label = "Select a Coffe-Growing Country", choices = grower.country$Country),
       # Slider for years
       sliderInput("year", label = "Select Year", min = min(years), max = max(years), value = median(years), step = 1),
       # Checkbutton for trend lines on the plots
