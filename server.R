@@ -29,49 +29,38 @@ my.server <- function(input, output) {
   
   # Price paid to the growers vs. Retail Price Plot
   output$gr.plot <- renderPlot({
-    # filtering out to the retail country chosen
-    gr.retail <- filter(retail.country, Country == input$country)
     
     # Change the column name to take out 'X'
-    colnames(gr.retail) <- c("Country", "1990", "1991", "1992", "1993", "1994", "1995", "1996",
+    colnames(retail.country) <- c("Country", "1990", "1991", "1992", "1993", "1994", "1995", "1996",
                              "1997", "1998", "1999", "2000", "2001", "2002", "2003",
                              "2004", "2005", "2006", "2007", "2008", "2009", "2010",
                              "2011", "2012", "2013", "2014", "2015")
     
-    # Transform data wide to long for the plot to read the data. 
-    gr.retail <- gather(gr.retail, 
-                        key = years,
-                        value = values,
-                        get("1990"), get('1991'), get('1992'), get('1993'), get('1994'), 
-                        get('1995'), get('1996'), get('1997'), get('1998'), get('1999'),
-                        get('2000'), get('2001'), get('2002'), get('2003'), get('2004'), 
-                        get('2005'), get('2006'), get('2007'), get('2008'), get('2009'),
-                        get('2010'), get('2011'), get('2012'), get('2013'), get('2014'), get('2015'))
+    # filtering out to the retail country chosen
+    retail.country <- filter(retail.country, Country == input$country) %>%
+      subset(select = c("Country", input$year[1]:input$year[2]))
+    retail.country <- retail.country %>%
+      gather_("years",
+              "values",
+              as.character(c(input$year[1]:input$year[2])))
     
-    # filtering out to the growing country chosen
-    gr.grower <- filter(grower.country, Country == input$cg.country)
     
     # Change the column name so it takes out X
-    colnames(gr.grower) <- c("Country", "1990", "1991", "1992", "1993", "1994", "1995", "1996",
+    colnames(grower.country) <- c("Country", "1990", "1991", "1992", "1993", "1994", "1995", "1996",
                              "1997", "1998", "1999", "2000", "2001", "2002", "2003",
                              "2004", "2005", "2006", "2007", "2008", "2009", "2010",
                              "2011", "2012", "2013", "2014", "2015")
-    
-    # Transform data wide to long for the plot to read the data.
-    gr.grower <- gather(gr.grower, 
-                        key = years,
-                        value = values,
-                        get("1990"), get('1991'), get('1992'), get('1993'), get('1994'), 
-                        get('1995'), get('1996'), get('1997'), get('1998'), get('1999'),
-                        get('2000'), get('2001'), get('2002'), get('2003'), get('2004'), 
-                        get('2005'), get('2006'), get('2007'), get('2008'), get('2009'),
-                        get('2010'), get('2011'), get('2012'), get('2013'), get('2014'), get('2015'))
+    # filtering out to the growing country chosen
+    grower.country <- filter(grower.country, Country == input$cg.country) %>%
+      subset(select = c("Country", input$year[1]:input$year[2]))
+    grower.country <- grower.country %>%
+      gather_("years",
+              "values",
+              as.character(c(input$year[1]:input$year[2])))
       
-      gr.grower <- filter(gr.grower, years == input$year)
-      
-    ggplot(data = gr.grower) +
+    ggplot(data = grower.country) +
       geom_point(mapping = aes(x = years, y = values, color = Country)) +
-      geom_point(data = gr.retail, mapping = aes(x = years, y = values, color = Country))
+      geom_point(data = retail.country, mapping = aes(x = years, y = values, color = Country))
   })
 
   
