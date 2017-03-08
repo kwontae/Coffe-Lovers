@@ -10,7 +10,14 @@ total.production <- read.csv("./data/clean1a-TotalProduction.csv", stringsAsFact
 grower.prices <- read.csv("./data/clean3a-PricesPaidToGrowers.csv", stringsAsFactors = FALSE)
 retail.prices <- read.csv("./data/clean3b-RetailPrices.csv", stringsAsFactors = FALSE)
 consumption <- read.csv("./data/clean4b-Consumption.csv", stringsAsFactors = FALSE)
-
+tp.country <- total.production[[1]];
+  #c("Angola","Benin","Bolivia","Brazil","Burundi","Cameroon","Central African Republic","Colombia","Congo, Dem. Rep. of","Congo, Rep. of",
+  #              "Costa Rica","Côte d'Ivoire","Cuba","Dominican Republic","Ecuador", "El Salvador","Equatorial Guinea","Ethiopia","Gabon","Ghana",
+  #              "Guatemala","Guinea","Guyana","Haiti","Honduras", "India","Indonesia","Jamaica","Kenya","Lao, People's Dem. Rep. of",
+  #              "Liberia","Madagascar","Malawi","Mexico","Nepal","Nicaragua","Nigeria","Panama","Papua New Guinea","Paraguay",
+  #              "Peru","Philippines","Rwanda","Sierra Leone","Sri Lanka","Tanzania","Thailand","Timor-Leste","Togo","Trinidad & Tobago",
+  #              "Uganda","Venezuela","Vietnam","Yemen","Zambia","Zimbabwe");
+country <- retail.prices[[1]];
 years <- c(1990:2015)
 
 my.ui <- fluidPage(
@@ -28,14 +35,15 @@ my.ui <- fluidPage(
     sidebarPanel(
       label = "Controls",
       # Drop-Down menu of countries
-      selectInput("country", label = "Select Country", choices = c("USA", "usa")),
+      selectInput('country', label = "Select Country", choices = country),
+      selectInput('tpcountry', label = "Select Total Production Country", choices = tp.country),
       # Slider for years
-      sliderInput("year", label = "Select Year", min = min(years), max = max(years), value = median(years), step = 1),
+      sliderInput('year', label = "Select Year", min = min(years), max = max(years), value = c(min(years),median(years)), step = 1),
       # Checkbutton for trend lines on the plots
-      radioButtons("trendline", label = "Show Trend Line?", choices = list("Yes" = "y", "No" = "n"))
+      radioButtons('trendline', label=strong("Show Trend Line?"), c("ON", "OFF"), selected = "ON")
       ),
     mainPanel(
-      tabsetPanel(
+      tabsetPanel(type = "tabs",
         # Summary panel
         tabPanel("Summary",
                  p("In this section, I want to tell a story about our group, how we found the International Coffee Organization (ICO), the aspects of their
@@ -72,7 +80,20 @@ my.ui <- fluidPage(
         tabPanel("Table", h3("Sample of Retail Prices (in US $/lb)"), tableOutput("table"),
                  h3("Sample of Grower Prices (in US cents/lb)"), tableOutput("table2")),
         # 1 of 3 plot panels
-        tabPanel("Total Production v Retail Price", plotOutput("tp.v.rp")),
+        tabPanel("Total Production v Retail Price", 
+             fluidRow(
+                column(width = 10, class = "well",
+                    h4("Brush and double-click to zoom"),
+                    plotOutput('plot.tp', height = 500,
+                        dblclick = "plot_dblclick",
+                        brush = brushOpts(
+                          id = "plot_brush",
+                          resetOnNew = TRUE
+                        )
+                    )
+                )
+            )
+        ),
         # 2 of 3 plot panels
         tabPanel("Price Paid to Growers v Retail Price", plotOutput("ppg.v.rp")),
         # 3 of 3 plot panels
@@ -80,5 +101,4 @@ my.ui <- fluidPage(
       )
     )
   )
-  
 )
