@@ -34,7 +34,7 @@ my.ui <- fluidPage(
       # Drop-Down menu of Grower Countries
       selectInput("cg.country", label = "Select a Coffe-Growing Country", choices = grower.country$Country),
       # Slider for years
-      sliderInput("year", label = "Select Year", min = min(years), max = max(years), value = median(years), step = 1),
+      sliderInput("year", label = "Select Year", min = min(years), max = max(years), value = c(min(years), max(years)), step = 1),
       # Checkbutton for trend lines on the plots
       radioButtons("trendline", label = "Show Trend Line?", choices = list("Yes" = "y", "No" = "n"))
       ),
@@ -78,7 +78,7 @@ my.ui <- fluidPage(
         # 1 of 3 plot panels
         tabPanel("Total Production v Retail Price", plotOutput("tp.v.rp")),
         # 2 of 3 plot panels
-        tabPanel("Price Paid to Growers v Retail Price", plotOutput("ppg.v.rp")),
+        tabPanel("Price Paid to Growers v Retail Price", plotOutput("gr.plot")),
         # 3 of 3 plot panels
         tabPanel("Retail Price v Consumption", plotOutput("rp.v.con"))
       )
