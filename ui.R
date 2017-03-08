@@ -42,10 +42,8 @@ my.ui <- fluidPage(
       selectInput('tpcountry', label = "Select Total Production Country", choices = tp.country),
       selectInput("cg.country", label = "Select a Coffe-Growing Country", choices = grower.country$Country),
       # Slider for years
-      sliderInput('year', label = "Select Year", min = min(years), max = max(years), value = c(min(years),median(years)), step = 1),
+      sliderInput('year', label = "Select Year", min = min(years), max = max(years), value = c(min(years),median(years)), step = 1)
 
-      # Checkbutton for trend lines on the plots
-      radioButtons('trendline', label=strong("Show Trend Line?"), c("ON", "OFF"), selected = "ON")
       ),
     mainPanel(
       tabsetPanel(type = "tabs",
