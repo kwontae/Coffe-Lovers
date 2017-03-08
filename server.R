@@ -1,6 +1,7 @@
 # server.R
 # Contributors: Kyle Simpson, Taehyun Kwon, Sojin Park, Mitesh Goyal
-
+library(ggplot2)
+library(dplyr)
 library(tidyverse)
 library(shiny)
 library(rsconnect)
@@ -13,6 +14,7 @@ consumption <- read.csv("./data/clean4b-Consumption.csv", stringsAsFactors = FAL
 
 my.server <- function(input, output) {
   # Temporary data frame for Table tab
+  ranges <- reactiveValues(x = NULL, y = NULL) #This allows the plot to adjust for more interaction.
   temp.retail <- filter(retail.prices, complete.cases(retail.prices[, 2:26])) %>% 
     select(Country, X1990, X1992, X1994, X1996, X1998, X2000, X2002, X2004, X2006, X2008, X2010, X2012, X2014, X2015)
   colnames(temp.retail) <- c("Country", "1990", "1992", "1994", "1996", "1998", "2000", "2002", "2004", "2006", "2008", "2010", "2012", "2014", "2015")
@@ -23,4 +25,47 @@ my.server <- function(input, output) {
     select(Country, X1990, X1992, X1994, X1996, X1998, X2000, X2002, X2004, X2006, X2008, X2010, X2012, X2014, X2015)
   colnames(temp.grower) <- c("Country", "1990", "1992", "1994", "1996", "1998", "2000", "2002", "2004", "2006", "2008", "2010", "2012", "2014", "2015")
   output$table2 <- renderTable(temp.grower)
+  
+  #this is my reactive variable of a main data set.
+  data.tp <- reactive({
+    colnames(total.production) <- c("Country", "1990", "1991", "1992", "1993", "1994", "1995", "1996", "1997", "1998", "1999", "2000", "2001", "2002", "2003", "2004","2005","2006","2007","2008","2009","2010","2011","2012","2013","2014","2015","2016");
+    total.production <- total.production %>%
+      filter(Country == input$tpcountry) %>%
+      subset(select = c("Country", input$year[1]:input$year[2]))
+    total.production <- total.production %>%
+      gather_("year","values",as.character(c(input$year[1]:input$year[2]))) %>%
+      select(values) %>%
+      mutate(values2 = data.rp()[[1]])
+    return(total.production);
+  })
+  data.rp <- reactive({
+    colnames(retail.prices) <- c("Country", "1990", "1991", "1992", "1993", "1994", "1995", "1996", "1997", "1998", "1999", "2000", "2001", "2002", "2003", "2004","2005","2006","2007","2008","2009","2010","2011","2012","2013","2014","2015");
+    retail.prices <- retail.prices %>%
+      subset(select = c("Country", input$year[1]:input$year[2])) %>%
+      filter(Country == input$country) %>%
+      gather_("year","values",as.character(c(input$year[1]:input$year[2]))) %>%
+      select(values);
+    return(retail.prices);
+  })
+
+  output$plot.tp <- renderPlot({
+    ploty <- ggplot(data = data.tp(), aes_string(x = colnames(data.tp()[2]), y = colnames(data.tp()[1]))) +
+      geom_point(size = 5) +
+      coord_cartesian(xlim = ranges$x, ylim = ranges$y) +
+      labs(x=paste0("Retail price from ",input$country,"(In US$/lb)"), y= paste0("Total production from ",input$tpcountry," (In thousand 60kg bags)"))
+    #if(input$trendline == "ON") {
+    #  ploty <- ploty + geom_smooth(se = TRUE)
+    #}
+    return(ploty)
+  })
+  observeEvent(input$plot_dblclick, {
+    brush <- input$plot_brush
+    if(!is.null(brush)) {
+      ranges$x <- c(brush$xmin, brush$xmax)
+      ranges$y <- c(brush$ymin, brush$ymax)
+    } else {
+      ranges$x <- NULL
+      ranges$y <- NULL
+    }
+  })
 }
