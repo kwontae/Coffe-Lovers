@@ -20,6 +20,8 @@ tp.country <- total.production[[1]];
 country <- retail.prices[[1]];
 years <- c(1990:2015)
 
+grower.country <- grower.prices[-45,]
+
 my.ui <- fluidPage(
   titlePanel("Coffee Industry Report"),
   
@@ -35,8 +37,10 @@ my.ui <- fluidPage(
     sidebarPanel(
       label = "Controls",
       # Drop-Down menu of countries
+
       selectInput('country', label = "Select Country", choices = country),
       selectInput('tpcountry', label = "Select Total Production Country", choices = tp.country),
+      selectInput("cg.country", label = "Select a Coffee-Growing Country", choices = grower.country$Country),
       # Slider for years
       sliderInput('year', label = "Select Year", min = min(years), max = max(years), value = c(min(years),median(years)), step = 1)
       ),
@@ -80,8 +84,8 @@ my.ui <- fluidPage(
         # 1 of 3 plot panels
         tabPanel("Total Production v Retail Price", 
              fluidRow(
-                column(width = 10, class = "well",
-                    h4("Brush and double-click to zoom"),
+                column(width = 10, class = "well", h3("Total Production v Retail Price"),
+                    h5(em("Brush and double-click to zoom")),
                     plotOutput('plot.tp', height = 500,
                         dblclick = "plot_dblclick",
                         brush = brushOpts(
@@ -90,10 +94,33 @@ my.ui <- fluidPage(
                         )
                     )
                 )
+            ),
+            fluidRow(
+              column(width = 10, class = "well",
+                     p("Above you will see a plot of Total Production versus Retail Price.  You can interact with the plot by brushing over a set of points
+                       and then double clicking the brushed area to zoom into the points.  You can exit the zoomed view by double clicking again at any time."))
             )
         ),
         # 2 of 3 plot panels
-        tabPanel("Price Paid to Growers v Retail Price", plotOutput("ppg.v.rp")),
+        tabPanel("Price Paid to Growers v Retail Price", 
+          fluidRow(
+            column(width = 10, class = "well", h3("Prices Paid to Growers v Retail Price"),
+              h5(em("Brush and double-click to zoom")),
+              plotOutput('gr.plot', height = 500,
+                dblclick = "plot_dblclick",
+                brush = brushOpts(
+                   id = "plot_brush",
+                   resetOnNew = TRUE
+                   )
+                )
+              )
+            ),
+          fluidRow(
+            column(width = 10, class = "well",
+                   p("Above you will see a plot of Prices Paid to Growers versus Retail Price.  You can interact with the plot by brushing over a set of points
+                       and then double clicking the brushed area to zoom into the points.  You can exit the zoomed view by double clicking again at any time."))
+          )
+        ),
         # 3 of 3 plot panels
         tabPanel("Retail Price v Consumption", plotOutput("rp.v.con"))
       )
