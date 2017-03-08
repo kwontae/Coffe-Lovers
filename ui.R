@@ -100,7 +100,20 @@ my.ui <- fluidPage(
             )
         ),
         # 2 of 3 plot panels
-        tabPanel("Price Paid to Growers v Retail Price", plotOutput("gr.plot")),
+        tabPanel("Price Paid to Growers v Retail Price", 
+          fluidRow(
+            column(width = 10, class = "well",
+              h4("Brush and double-click to zoom"),
+              plotOutput('gr.plot', height = 500,
+                dblclick = "plot_dblclick",
+                brush = brushOpts(
+                   id = "plot_brush",
+                   resetOnNew = TRUE
+                   )
+                )
+              )
+            )
+        ),
         # 3 of 3 plot panels
         tabPanel("Retail Price v Consumption", plotOutput("rp.v.con"))
       )

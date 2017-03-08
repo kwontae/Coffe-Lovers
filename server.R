@@ -105,7 +105,8 @@ my.server <- function(input, output) {
       
     ggplot(data = grower.country) +
       geom_point(mapping = aes(x = years, y = values, color = Country)) +
-      geom_point(data = retail.country, mapping = aes(x = years, y = values, color = Country))
+      geom_point(data = retail.country, mapping = aes(x = years, y = values, color = Country)) +
+      labs(list(y = "Price paid to growers vs. Retail price of 'roasted' coffee in US$/lb", x = "years"))
   })
 
 }
