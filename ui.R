@@ -20,6 +20,8 @@ tp.country <- total.production[[1]];
 country <- retail.prices[[1]];
 years <- c(1990:2015)
 
+grower.country <- grower.prices[-45,]
+
 my.ui <- fluidPage(
   titlePanel("Coffee Industry Report"),
   
@@ -35,10 +37,13 @@ my.ui <- fluidPage(
     sidebarPanel(
       label = "Controls",
       # Drop-Down menu of countries
+
       selectInput('country', label = "Select Country", choices = country),
       selectInput('tpcountry', label = "Select Total Production Country", choices = tp.country),
+      selectInput("cg.country", label = "Select a Coffe-Growing Country", choices = grower.country$Country),
       # Slider for years
       sliderInput('year', label = "Select Year", min = min(years), max = max(years), value = c(min(years),median(years)), step = 1),
+
       # Checkbutton for trend lines on the plots
       radioButtons('trendline', label=strong("Show Trend Line?"), c("ON", "OFF"), selected = "ON")
       ),
@@ -95,7 +100,7 @@ my.ui <- fluidPage(
             )
         ),
         # 2 of 3 plot panels
-        tabPanel("Price Paid to Growers v Retail Price", plotOutput("ppg.v.rp")),
+        tabPanel("Price Paid to Growers v Retail Price", plotOutput("gr.plot")),
         # 3 of 3 plot panels
         tabPanel("Retail Price v Consumption", plotOutput("rp.v.con"))
       )
