@@ -43,7 +43,6 @@ my.ui <- fluidPage(
       selectInput("cg.country", label = "Select a Coffee-Growing Country", choices = grower.country$Country),
       # Slider for years
       sliderInput('year', label = "Select Year", min = min(years), max = max(years), value = c(min(years),median(years)), step = 1)
-
       ),
     mainPanel(
       tabsetPanel(type = "tabs",
