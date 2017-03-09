@@ -36,9 +36,9 @@ my.server <- function(input, output) {
       filter(Country == input$tpcountry) %>%
       subset(select = c("Country", input$year[1]:input$year[2]))
     total.production <- total.production %>%
-      gather_("year","values",as.character(c(input$year[1]:input$year[2]))) %>%
-      select(values) %>%
-      mutate(values2 = data.rp()[[1]])
+      gather_("year","production",as.character(c(input$year[1]:input$year[2]))) %>%
+      select(year, production) %>%
+      mutate(retail = data.rp()[[1]])
     return(total.production);
   })
   data.rp <- reactive({
@@ -52,13 +52,10 @@ my.server <- function(input, output) {
   })
 
   output$plot.tp <- renderPlot({
-    ploty <- ggplot(data = data.tp(), aes_string(x = colnames(data.tp()[2]), y = colnames(data.tp()[1]))) +
+    ploty <- ggplot(data = data.tp(), aes_string(x = colnames(data.tp()[3]), y = colnames(data.tp()[2]), color = colnames(data.tp()[1]))) +
       geom_point(size = 5) +
       coord_cartesian(xlim = ranges$x, ylim = ranges$y) +
       labs(x=paste0("Retail price from ",input$country,"(In US$/lb)"), y= paste0("Total production from ",input$tpcountry," (In thousand 60kg bags)"))
-    #if(input$trendline == "ON") {
-    #  ploty <- ploty + geom_smooth(se = TRUE)
-    #}
     return(ploty)
   })
   observeEvent(input$plot_dblclick, {
@@ -70,6 +67,10 @@ my.server <- function(input, output) {
       ranges$x <- NULL
       ranges$y <- NULL
     }
+  })
+  
+  output$brush_info <- renderPrint({
+    brushedPoints(data.tp(), input$plot_brush)
   })
 
 # Price paid to the growers vs. Retail Price Plot
@@ -124,5 +125,4 @@ my.server <- function(input, output) {
       ranges$y <- NULL
     }
   })
-
 }
