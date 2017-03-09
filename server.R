@@ -115,11 +115,12 @@ my.server <- function(input, output) {
       scale_size(range = c(5, 7))
   })
   
-  observeEvent(input$gr.plot_dblclick, {
-    brush <- input$gr.plot_brush
-    if(!is.null(brush)) {
+  observeEvent(input$plot1_dblclick, {
+    brush <- input$plot1_brush
+    if (!is.null(brush)) {
       ranges$x <- c(brush$xmin, brush$xmax)
       ranges$y <- c(brush$ymin, brush$ymax)
+      
     } else {
       ranges$x <- NULL
       ranges$y <- NULL
