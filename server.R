@@ -112,7 +112,8 @@ my.server <- function(input, output) {
       geom_point(mapping = aes(x = years, y = values, color = Country, size = values)) +
       geom_point(data = data.retail.gr(), mapping = aes(x = years, y = values, color = Country, size = values)) +
       labs(list(y = "Price paid to growers vs. Retail price of 'roasted' coffee in US$/lb", x = "years")) +
-      scale_size(range = c(5, 7))
+      scale_size(range = c(5, 7)) +
+      coord_cartesian(xlim = ranges$x, ylim = ranges$y)
   })
   
   observeEvent(input$plot1_dblclick, {
