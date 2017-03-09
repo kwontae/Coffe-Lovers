@@ -97,6 +97,8 @@ my.ui <- fluidPage(
             ),
             fluidRow(
               column(width = 10, class = "well",
+                     h4("Brushed points"),
+                     verbatimTextOutput("brush_info"),
                      p("Above you will see a plot of Total Production versus Retail Price.  You can interact with the plot by brushing over a set of points
                        and then double clicking the brushed area to zoom into the points.  You can exit the zoomed view by double clicking again at any time.  
                        You can change the x-axis in this plot by selecting a different country from the first drop-down menu 'Select Country', and change

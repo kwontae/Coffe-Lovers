@@ -36,9 +36,9 @@ my.server <- function(input, output) {
       filter(Country == input$tpcountry) %>%
       subset(select = c("Country", input$year[1]:input$year[2]))
     total.production <- total.production %>%
-      gather_("year","values",as.character(c(input$year[1]:input$year[2]))) %>%
-      select(year, values) %>%
-      mutate(values2 = data.rp()[[1]])
+      gather_("year","production",as.character(c(input$year[1]:input$year[2]))) %>%
+      select(year, production) %>%
+      mutate(retail = data.rp()[[1]])
     return(total.production);
   })
   data.rp <- reactive({
@@ -67,6 +67,10 @@ my.server <- function(input, output) {
       ranges$x <- NULL
       ranges$y <- NULL
     }
+  })
+  
+  output$brush_info <- renderPrint({
+    brushedPoints(data.tp(), input$plot_brush)
   })
 
   # Price paid to the growers vs. Retail Price Plot
@@ -105,5 +109,4 @@ my.server <- function(input, output) {
       geom_point(data = retail.country, mapping = aes(x = years, y = values, color = Country)) +
       labs(list(y = "Price paid to growers vs. Retail price of 'roasted' coffee in US$/lb", x = "years"))
   })
-
 }
