@@ -122,7 +122,7 @@ my.ui <- fluidPage(
                    p("Above you will see a plot of Prices Paid to Growers versus Retail Price.  You can interact with the plot by brushing over a set of points
                        and then double clicking the brushed area to zoom into the points.  You can exit the zoomed view by double clicking again at any time.  
                        You can change the x-axis in this plot by selecting a different country from the first drop-down menu 'Select Country', and change
-                       the y-axis in this plot by selecting a different country from the second drop-down menu 'Select Total Production Country'."))
+                       the y-axis in this plot by selecting a different country from the third drop-down menu 'Select Total Production Country'."))
           )
         ),
         # 3 of 3 plot panels
