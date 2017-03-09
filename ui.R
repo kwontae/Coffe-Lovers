@@ -111,9 +111,9 @@ my.ui <- fluidPage(
             column(width = 10, class = "well", h3("Prices Paid to Growers v Retail Price"),
               h5(em("Brush and double-click to zoom")),
               plotOutput('gr.plot', height = 500,
-                dblclick = "plot_dblclick",
+                dblclick = "gr.plot_dblclick",
                 brush = brushOpts(
-                   id = "plot_brush",
+                   id = "gr.plot_brush",
                    resetOnNew = TRUE
                    )
                 )
