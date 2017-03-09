@@ -130,7 +130,7 @@ my.server <- function(input, output) {
   
   # Retail Prices vs Consumption Plot
   
-  # Retail Prices
+  # Consumption data frame
   data.consump <- reactive({
   # Converts column names to readable format
   colnames(consump.country) <- c("Country", "1990", "1991", "1992", "1993", "1994", "1995", "1996", "1997", "1998", "1999",
