@@ -12,8 +12,9 @@ grower.prices <- read.csv("./data/clean3a-PricesPaidToGrowers.csv", stringsAsFac
 retail.prices <- read.csv("./data/clean3b-RetailPrices.csv", stringsAsFactors = FALSE)
 consumption <- read.csv("./data/clean4b-Consumption.csv", stringsAsFactors = FALSE)
 
-grower.country <- grower.prices[-45,]
-retail.country <- retail.prices[-29,]
+grower.country <- grower.prices[-45, ]
+retail.country <- retail.prices[-29, ]
+consump.country <- consumption[-36, ]
 
 my.server <- function(input, output) {
   # Temporary data frame for Table tab
@@ -127,4 +128,35 @@ my.server <- function(input, output) {
       ranges$y <- NULL
     }
   })
+  
+  # Retail Prices vs Consumption Plot
+  
+  # Retail Prices
+  data.consump <- reactive({
+  # Converts column names to readable format
+  colnames(consump.country) <- c("Country", "1990", "1991", "1992", "1993", "1994", "1995", "1996", "1997", "1998", "1999",
+                                 "2000", "2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008", "2009", "2010",
+                                 "2011", "2012", "2013", "2014", "2015")
+  
+  # Filters the consumption table according to the selected country
+  consump.country <- filter(consump.country, Country == input$country) %>% 
+    subset(select = c("Country", input$year[1]:input$year[2])) %>% 
+    gather_("years", "values", as.character(c(input$year[1]:input$year[2])))
+  return(consump.country)
+  })
+  
+  # The Plot
+  output$rvc.plot <- renderPlot({
+    plot.final <- ggplot(data = data.retail.gr()) +
+      geom_point(mapping = aes(x = years, y = values, size = data.consump()$values), color = "maroon") +
+      
+      # Changes the x and y limits, rescales the plot
+      coord_cartesian(xlim = ranges$x, ylim = ranges$y) +
+      labs(x = "Year", y = paste("Retail Price(USD/lb) vs Consumption for", input$country), size = NULL) +
+      
+      # Eliminates the legend
+      theme(legend.position="none")
+    return(plot.final)
+  })
+
 }

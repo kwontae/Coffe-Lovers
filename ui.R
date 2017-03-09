@@ -12,7 +12,7 @@ retail.prices <- read.csv("./data/clean3b-RetailPrices.csv", stringsAsFactors = 
 consumption <- read.csv("./data/clean4b-Consumption.csv", stringsAsFactors = FALSE)
 tp.country <- total.production[[1]];
   #c("Angola","Benin","Bolivia","Brazil","Burundi","Cameroon","Central African Republic","Colombia","Congo, Dem. Rep. of","Congo, Rep. of",
-  #              "Costa Rica","Côte d'Ivoire","Cuba","Dominican Republic","Ecuador", "El Salvador","Equatorial Guinea","Ethiopia","Gabon","Ghana",
+  #              "Costa Rica","CC4te d'Ivoire","Cuba","Dominican Republic","Ecuador", "El Salvador","Equatorial Guinea","Ethiopia","Gabon","Ghana",
   #              "Guatemala","Guinea","Guyana","Haiti","Honduras", "India","Indonesia","Jamaica","Kenya","Lao, People's Dem. Rep. of",
   #              "Liberia","Madagascar","Malawi","Mexico","Nepal","Nicaragua","Nigeria","Panama","Papua New Guinea","Paraguay",
   #              "Peru","Philippines","Rwanda","Sierra Leone","Sri Lanka","Tanzania","Thailand","Timor-Leste","Togo","Trinidad & Tobago",
@@ -128,7 +128,31 @@ my.ui <- fluidPage(
           )
         ),
         # 3 of 3 plot panels
-        tabPanel("Retail Price v Consumption", plotOutput("rp.v.con"))
+        tabPanel("Retail Price v Consumption", 
+                 fluidRow(
+                   column(width = 10, class = "well", h3("Retail Price v Consumption"),
+                          h5(em("Brush and double-click to zoom")),
+                          plotOutput("rvc.plot", height = 500,
+                                     dblclick = "plot_dblclick",
+                                     brush = brushOpts(
+                                       id = "plot_brush",
+                                       resetOnNew = TRUE
+                                     )
+                          )
+                   )
+                 ),
+                 fluidRow(
+                   column(width = 10, class = "well",
+                          p("Above you will se a plot that shows the how the Retail Price of Coffe affected its consumption over the years. You can interact with the plot by brushing over a set of points
+                       and then double clicking the brushed area to zoom into the points.  You can exit the zoomed view by double clicking again at any time. You can navigate data of different countries by
+                            selecting different countries from the drop-down menu. The size of the point is proportional to the consumption during the respective year."))
+                ),
+                fluidRow(
+                  column(width = 10, class = "well",
+                         p("Fun Fact : It is well known fact that coffee is one of the best stress-busters. In the plot of USA, one can clearly see the dramatic increase in consumption of coffee after 2008, which
+                            was the year of the Crisis."))
+                )
+        )
       )
     )
   )
