@@ -98,7 +98,9 @@ my.ui <- fluidPage(
             fluidRow(
               column(width = 10, class = "well",
                      p("Above you will see a plot of Total Production versus Retail Price.  You can interact with the plot by brushing over a set of points
-                       and then double clicking the brushed area to zoom into the points.  You can exit the zoomed view by double clicking again at any time."))
+                       and then double clicking the brushed area to zoom into the points.  You can exit the zoomed view by double clicking again at any time.  
+                       You can change the x-axis in this plot by selecting a different country from the first drop-down menu 'Select Country', and change
+                       the y-axis in this plot by selecting a different country from the second drop-down menu 'Select Total Production Country'."))
             )
         ),
         # 2 of 3 plot panels
@@ -118,7 +120,9 @@ my.ui <- fluidPage(
           fluidRow(
             column(width = 10, class = "well",
                    p("Above you will see a plot of Prices Paid to Growers versus Retail Price.  You can interact with the plot by brushing over a set of points
-                       and then double clicking the brushed area to zoom into the points.  You can exit the zoomed view by double clicking again at any time."))
+                       and then double clicking the brushed area to zoom into the points.  You can exit the zoomed view by double clicking again at any time.  
+                       You can change the x-axis in this plot by selecting a different country from the first drop-down menu 'Select Country', and change
+                       the y-axis in this plot by selecting a different country from the second drop-down menu 'Select Total Production Country'."))
           )
         ),
         # 3 of 3 plot panels
