@@ -90,6 +90,12 @@ my.ui <- fluidPage(
                         )
                     )
                 )
+            ),
+            fluidRow(
+              column(width = 10, class = "well",
+                     h4("Brushed points"),
+                     verbatimTextOutput("brush_info")
+                     )
             )
         ),
         # 2 of 3 plot panels
