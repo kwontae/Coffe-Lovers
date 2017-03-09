@@ -143,7 +143,7 @@ my.ui <- fluidPage(
                  ),
                  fluidRow(
                    column(width = 10, class = "well",
-                          p("Above you will se a plot that shows the how the Retail Price of Coffe affected its consumption over the years. You can interact with the plot by brushing over a set of points
+                          p("Above you will se a plot that shows the how the Retail Price of Coffee affected its consumption over the years. You can interact with the plot by brushing over a set of points
                        and then double clicking the brushed area to zoom into the points.  You can exit the zoomed view by double clicking again at any time. You can navigate data of different countries by
                             selecting different countries from the drop-down menu. The size of the point is proportional to the consumption during the respective year."))
                 ),
