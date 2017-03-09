@@ -72,41 +72,57 @@ my.server <- function(input, output) {
     }
   })
 
-  # Price paid to the growers vs. Retail Price Plot
-  output$gr.plot <- renderPlot({
-    
+# Price paid to the growers vs. Retail Price Plot
+  data.retail.gr <- reactive({
     # Change the column name to take out 'X'
-    colnames(retail.country) <- c("Country", "1990", "1991", "1992", "1993", "1994", "1995", "1996",
-                             "1997", "1998", "1999", "2000", "2001", "2002", "2003",
-                             "2004", "2005", "2006", "2007", "2008", "2009", "2010",
-                             "2011", "2012", "2013", "2014", "2015")
-    
+    colnames(retail.country) <- c("Country", "1990", "1991", "1992", "1993", "1994", "1995", 
+                                  "1996", "1997", "1998", "1999", "2000", "2001", "2002", 
+                                  "2003", "2004", "2005", "2006", "2007", "2008", "2009", 
+                                  "2010", "2011", "2012", "2013", "2014", "2015")
     # filtering out to the retail country chosen
     retail.country <- filter(retail.country, Country == input$country) %>%
       subset(select = c("Country", input$year[1]:input$year[2]))
-    retail.country <- retail.country %>%
-      gather_("years",
-              "values",
-              as.character(c(input$year[1]:input$year[2])))
-    
-    
+      retail.country <- retail.country %>%
+        gather_("years",
+               "values",
+                as.character(c(input$year[1]:input$year[2])))
+    return(retail.country)
+  })
+  
+  data.grower.gr <- reactive({
     # Change the column name so it takes out X
     colnames(grower.country) <- c("Country", "1990", "1991", "1992", "1993", "1994", "1995", "1996",
-                             "1997", "1998", "1999", "2000", "2001", "2002", "2003",
-                             "2004", "2005", "2006", "2007", "2008", "2009", "2010",
-                             "2011", "2012", "2013", "2014", "2015")
+                                  "1997", "1998", "1999", "2000", "2001", "2002", "2003",
+                                  "2004", "2005", "2006", "2007", "2008", "2009", "2010",
+                                  "2011", "2012", "2013", "2014", "2015")
     # filtering out to the growing country chosen
     grower.country <- filter(grower.country, Country == input$cg.country) %>%
       subset(select = c("Country", input$year[1]:input$year[2]))
-    grower.country <- grower.country %>%
-      gather_("years",
-              "values",
-              as.character(c(input$year[1]:input$year[2])))
-      
-    ggplot(data = grower.country) +
-      geom_point(mapping = aes(x = years, y = values, color = Country)) +
-      geom_point(data = retail.country, mapping = aes(x = years, y = values, color = Country)) +
-      labs(list(y = "Price paid to growers vs. Retail price of 'roasted' coffee in US$/lb", x = "years"))
+      grower.country <- grower.country %>%
+        gather_("years",
+                "values",
+                as.character(c(input$year[1]:input$year[2])))
+    return(grower.country)
+  })
+  
+  output$gr.plot <- renderPlot({
+  
+    ggplot(data = data.grower.gr()) +
+      geom_point(mapping = aes(x = years, y = values, color = Country, size = values)) +
+      geom_point(data = data.retail.gr(), mapping = aes(x = years, y = values, color = Country, size = values)) +
+      labs(list(y = "Price paid to growers vs. Retail price of 'roasted' coffee in US$/lb", x = "years")) +
+      scale_size(range = c(5, 7))
+  })
+  
+  observeEvent(input$gr.plot_dblclick, {
+    brush <- input$gr.plot_brush
+    if(!is.null(brush)) {
+      ranges$x <- c(brush$xmin, brush$xmax)
+      ranges$y <- c(brush$ymin, brush$ymax)
+    } else {
+      ranges$x <- NULL
+      ranges$y <- NULL
+    }
   })
 
 }
